@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/chat")
 public class ChatController {
 
@@ -26,7 +27,8 @@ public class ChatController {
 
     @PostMapping
     public Chat createGroup(@RequestBody final Chat groupName) throws ExecutionException, InterruptedException {
-        System.out.println(groupName);
+        System.out.println("post has gone through");
+        System.out.println("this is the group name" + groupName.toString());
         chatService.createGroup(groupName);
         return groupName;
     }

@@ -40,6 +40,6 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public boolean createGroup(final Chat groupName) throws ExecutionException, InterruptedException {
-        return chatRepository.createGroup();
+        return false;
     }
 }
