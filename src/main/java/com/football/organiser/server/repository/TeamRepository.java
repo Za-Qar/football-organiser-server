@@ -1,20 +1,13 @@
 package com.football.organiser.server.repository;
 
+import com.football.organiser.server.database.FirestoreDatabase;
 import com.football.organiser.server.models.Team;
+import com.football.organiser.server.models.TeamMember;
 import com.google.api.core.ApiFuture;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
+import com.google.cloud.firestore.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,58 +16,74 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class TeamRepository {
 
-    Firestore db;
+    @Autowired
+    FirestoreDatabase firestoreDatabase;
 
-    public TeamRepository() throws IOException {
-        InputStream serviceAccount = new FileInputStream("src/main/resources/fireStoreCred.json");
-        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(credentials)
-                .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com/")
-                .build();
-        FirebaseApp.initializeApp(options);
-        this.db = FirestoreClient.getFirestore();
-    }
+    public Map<String, Object> createTeam(final Team team) throws ExecutionException, InterruptedException {
 
-    public Map<String, String> createTeam(final Team team) throws ExecutionException, InterruptedException {
+        // Add document data  with id "team.getTeamName()
+        Map<String, Object> teamData = new HashMap<>();
+        teamData.put("teamName", team.getTeamName());
+        teamData.put("country", team.getCountry());
+        teamData.put("teamCaptain", team.getTeamCaptain());
+        teamData.put("uuid", team.getUuid());
 
-        // Add document data  with id "alovelace" using a hashmap
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("bham", "league");
-        docData.put("data", "test");
-        docData.put("born", 1995);
+        // I can put team.getTeamName() as an argument for .document() to make the teams document name as the team name
+        // without it, a uid will be automatically generated
+        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document();
 
-        Map<String, String> messageData = new HashMap<>();
-        messageData.put("1", "Hello");
-        messageData.put("2", "Sup");
-        messageData.put("3", "Yo");
-
-
-        System.out.println("step 1");
-        DocumentReference docRef = db.collection("groups").document("bham superleague");
-
-        DocumentReference messageRef = db.collection("groups").document("bham superleague").collection("messages").document("texts");
-
-
-        System.out.println("step 2");
         //asynchronously write data
-        ApiFuture<WriteResult> docResult = docRef.set(docData);
-        ApiFuture<WriteResult> messageResult = messageRef.set(messageData);
+        ApiFuture<WriteResult> populateCreatedGroupCollection = createGroupCollection.set(teamData);
 
+        // result.get() blocks on response
+        populateCreatedGroupCollection.get();
 
-
-        System.out.println("step 4");
-//         ...
-//         result.get() blocks on response
-        System.out.println("Update time : " + docResult.get().getUpdateTime());
-        System.out.println("Update time : " + messageResult.get().getUpdateTime());
-
-        Map<String, String> createdTeam = new HashMap<>();
+        Map<String, Object> createdTeam = new HashMap<>();
         createdTeam.put("teamName", team.getTeamName());
         createdTeam.put("country", team.getCountry());
-
-        System.out.println("this is the received team object" + createdTeam);
+        teamData.put("teamCaptain", team.getTeamCaptain());
+        teamData.put("uuid", team.getUuid());
 
         return createdTeam;
+    }
+
+    public Map<String, Object> addPlayersToGroup(final TeamMember teamMember) throws ExecutionException, InterruptedException {
+
+        // Add document data
+        Map<String, Object> teamMemberData = new HashMap<>();
+        teamMemberData.put(teamMember.getTeamMemberName(), teamMember);
+
+        Map<String, Object> teamMemberField = new HashMap<>();
+        teamMemberField.put("teamMembers", teamMemberData);
+
+        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamName()).collection("teamMembers").document();
+
+        //asynchronously write data
+        ApiFuture<WriteResult> populateCreatedGroupCollection = createGroupCollection.set(teamMemberData);
+
+        // result.get() blocks on response
+        populateCreatedGroupCollection.get();
+
+        Map<String, Object> addedTeamMember = new HashMap<>();
+        addedTeamMember.put("addedTeamMember", teamMember.toString());
+        addedTeamMember.put("addedToThisTeam", teamMember.getTeamName());
+
+        return addedTeamMember;
+    }
+
+    public Map<String, Object> getAllTeams() throws ExecutionException, InterruptedException {
+
+        Map<String, Object> allTeams = new HashMap<>();
+
+        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").get();
+
+        List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+
+        for (DocumentSnapshot document : documents) {
+            allTeams.put(document.getId(), document.toObject(Team.class));
+            System.out.println(document.getId() + " => " + document.toObject(Team.class));
+        }
+
+        return allTeams;
     }
 }
