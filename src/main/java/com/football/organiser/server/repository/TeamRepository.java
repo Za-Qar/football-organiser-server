@@ -77,7 +77,8 @@ public class TeamRepository {
 
     public Map<String, Object> getAllTeamsAndTeamMembersList() throws ExecutionException, InterruptedException {
         Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
-        Map<String, Object> allTeamsAndTeamMembersListTemp = new HashMap<>();
+//        Map<String, Object> allTeamsAndTeamMembersListTemp = new HashMap<>();
+        List<Object> allTeamsAndTeamMembersListTemp = new ArrayList<>();
 
         ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
         ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
@@ -86,15 +87,19 @@ public class TeamRepository {
         List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
 
         for (DocumentSnapshot teamsDocument : allTeamsDocuments) {
-            allTeamsAndTeamMembersListTemp.put("teamsDocument", teamsDocument.toObject(Team.class));
+            allTeamsAndTeamMembersListTemp.add(teamsDocument.toObject(Team.class));
 
             for(DocumentSnapshot teamMember : teamMemberDocuments){
-                allTeamsAndTeamMembersListTemp.put("teamMember", teamMember.toObject(TeamMember.class));
+                allTeamsAndTeamMembersListTemp.add(teamMember.toObject(TeamMember.class));
             }
 
             allTeamsAndTeamMembersList.put(teamsDocument.getId(), allTeamsAndTeamMembersListTemp);
+            System.out.println("this is the object: " + allTeamsAndTeamMembersList);
+            System.out.println("this is the temp object: " + allTeamsAndTeamMembersListTemp);
+            allTeamsAndTeamMembersListTemp.clear();
         }
 
+        System.out.println("this is before the return: " + allTeamsAndTeamMembersList);
         return allTeamsAndTeamMembersList;
     }
 
