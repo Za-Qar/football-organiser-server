@@ -8,10 +8,13 @@ import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class TeamRepository {
@@ -73,29 +76,23 @@ public class TeamRepository {
     }
 
     public Map<String, Object> getAllTeamsAndTeamMembersList() throws ExecutionException, InterruptedException {
-
-//        Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
-//
-//        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").get();
-//
-//        List<QueryDocumentSnapshot> documents = query.get().getDocuments();
-//
-//        for (DocumentSnapshot document : documents) {
-//            allTeamsAndTeamMembersList.put(document.getId(), document.toObject(Team.class));
-//            System.out.println(document.getId() + " => " + document.toObject(Team.class));
-//        }
-//
-//        return allTeamsAndTeamMembersList;
-
         Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
+        Map<String, Object> allTeamsAndTeamMembersListTemp = new HashMap<>();
 
-        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
+        ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
+        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
 
-        List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+        List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
+        List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
 
-        for (DocumentSnapshot document : documents) {
-            allTeamsAndTeamMembersList.put(document.getId(), document.toObject(TeamMember.class));
-            System.out.println(document.getId() + " => " + document.toObject(TeamMember.class));
+        for (DocumentSnapshot teamsDocument : allTeamsDocuments) {
+            allTeamsAndTeamMembersListTemp.put("teamsDocument", teamsDocument.toObject(Team.class));
+
+            for(DocumentSnapshot teamMember : teamMemberDocuments){
+                allTeamsAndTeamMembersListTemp.put("teamMember", teamMember.toObject(TeamMember.class));
+            }
+
+            allTeamsAndTeamMembersList.put(teamsDocument.getId(), allTeamsAndTeamMembersListTemp);
         }
 
         return allTeamsAndTeamMembersList;
@@ -113,5 +110,10 @@ public class TeamRepository {
         firestoreDatabase.db.collection("teams").document("5I5bKW4EIMQ2riQvXqcv").update(teamDataToUpdate);
 
         return teamDataToUpdate;
+    }
+
+    public static <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
+        return IntStream.range(0, keys.size()).boxed()
+                .collect(Collectors.toMap(keys::get, values::get));
     }
 }
