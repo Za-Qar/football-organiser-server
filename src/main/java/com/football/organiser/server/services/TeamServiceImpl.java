@@ -26,7 +26,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public Map<String, Object> getAllTeams() throws ExecutionException, InterruptedException {
-        return teamRepository.getAllTeams();
+        return teamRepository.getAllTeamsAndTeamMembersList();
     }
 
     @Override

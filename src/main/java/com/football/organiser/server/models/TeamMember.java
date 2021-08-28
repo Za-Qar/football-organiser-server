@@ -20,6 +20,8 @@ public class TeamMember {
         this.teamName = teamName;
     }
 
+    public TeamMember(){}
+
     public String getTeamMemberName() {
         return teamMemberName;
     }

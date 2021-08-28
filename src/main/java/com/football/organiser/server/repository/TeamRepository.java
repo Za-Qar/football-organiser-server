@@ -49,12 +49,17 @@ public class TeamRepository {
 
     public Map<String, Object> addPlayersToGroup(final TeamMember teamMember) throws ExecutionException, InterruptedException {
 
+        // data model 1, teams members are sub collections
         // Add document data
         Map<String, Object> teamMemberData = new HashMap<>();
-        teamMemberData.put(teamMember.getTeamMemberName(), teamMember);
+        teamMemberData.put("teamMemberName", teamMember.getTeamName());
+        teamMemberData.put("joinedTimeStamp", teamMember.getJoinedTimeStamp());
+        teamMemberData.put("photoUrl", teamMember.getPhotoUrl());
+        teamMemberData.put("uuid", teamMember.getUuid());
+        teamMemberData.put("location", teamMember.getLocation());
+        teamMemberData.put("phoneNumber", teamMember.getPhoneNumber());
+        teamMemberData.put("teamName", teamMember.getTeamName());
 
-        Map<String, Object> teamMemberField = new HashMap<>();
-        teamMemberField.put("teamMembers", teamMemberData);
 
         DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamName()).collection("teamMembers").document();
 
@@ -64,26 +69,49 @@ public class TeamRepository {
         // result.get() blocks on response
         populateCreatedGroupCollection.get();
 
-        Map<String, Object> addedTeamMember = new HashMap<>();
-        addedTeamMember.put("addedTeamMember", teamMember.toString());
-        addedTeamMember.put("addedToThisTeam", teamMember.getTeamName());
-
-        return addedTeamMember;
+        return teamMemberData;
     }
 
-    public Map<String, Object> getAllTeams() throws ExecutionException, InterruptedException {
+    public Map<String, Object> getAllTeamsAndTeamMembersList() throws ExecutionException, InterruptedException {
 
-        Map<String, Object> allTeams = new HashMap<>();
+//        Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
+//
+//        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").get();
+//
+//        List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+//
+//        for (DocumentSnapshot document : documents) {
+//            allTeamsAndTeamMembersList.put(document.getId(), document.toObject(Team.class));
+//            System.out.println(document.getId() + " => " + document.toObject(Team.class));
+//        }
+//
+//        return allTeamsAndTeamMembersList;
 
-        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").get();
+        Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
+
+        ApiFuture<QuerySnapshot> query = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
 
         List<QueryDocumentSnapshot> documents = query.get().getDocuments();
 
         for (DocumentSnapshot document : documents) {
-            allTeams.put(document.getId(), document.toObject(Team.class));
-            System.out.println(document.getId() + " => " + document.toObject(Team.class));
+            allTeamsAndTeamMembersList.put(document.getId(), document.toObject(TeamMember.class));
+            System.out.println(document.getId() + " => " + document.toObject(TeamMember.class));
         }
 
-        return allTeams;
+        return allTeamsAndTeamMembersList;
+    }
+
+    public Map<String, Object> getTeamById(final String id, final Team team, final TeamMember teamMember){
+
+
+        Map<String, Object> teamDataToUpdate = new HashMap<>();
+        teamDataToUpdate.put("teamName", team.getTeamName());
+        teamDataToUpdate.put("country", team.getCountry());
+        teamDataToUpdate.put("teamCaptain", team.getTeamCaptain());
+
+
+        firestoreDatabase.db.collection("teams").document("5I5bKW4EIMQ2riQvXqcv").update(teamDataToUpdate);
+
+        return teamDataToUpdate;
     }
 }
