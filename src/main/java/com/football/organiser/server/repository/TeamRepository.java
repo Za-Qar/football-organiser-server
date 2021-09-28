@@ -75,13 +75,18 @@ public class TeamRepository {
         return teamMemberData;
     }
 
-    public Map<String, List<TeamMember>> getAllTeamMembersMap() throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
-        List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
+    public Map<String, List<Team>> getAllTeams() throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
+        List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
 
-        return teamMemberDocuments.stream()
-                .map(a -> a.toObject(TeamMember.class))
-                .collect(Collectors.groupingBy(TeamMember::getTeamName));
+        allTeamsDocuments.stream()
+                .map(a -> a.toObject(Team.class))
+                .collect(Collectors.groupingBy(Team::getTeamName))
+                .forEach((a, b) -> System.out.println(a));
+
+        return allTeamsDocuments.stream()
+                .map(a -> a.toObject(Team.class))
+                .collect(Collectors.groupingBy(Team::getTeamName));
     }
 
     public Map<String, Object> getTeamById(final String id, final Team team, final TeamMember teamMember){

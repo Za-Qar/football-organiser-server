@@ -36,7 +36,7 @@ public class TeamController {
     }
 
     @GetMapping
-    public Map<String, List<TeamMember>> getAllTeams() throws ExecutionException, InterruptedException {
-        return teamService.getAllTeamMembers();
+    public Map<String, List<Team>> getAllTeams() throws ExecutionException, InterruptedException {
+        return teamService.getAllTeams();
     }
 }
