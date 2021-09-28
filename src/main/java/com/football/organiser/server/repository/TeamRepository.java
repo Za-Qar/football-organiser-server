@@ -75,32 +75,13 @@ public class TeamRepository {
         return teamMemberData;
     }
 
-    public Map<String, Object> getAllTeamsAndTeamMembersList() throws ExecutionException, InterruptedException {
-        Map<String, Object> allTeamsAndTeamMembersList = new HashMap<>();
-//        Map<String, Object> allTeamsAndTeamMembersListTemp = new HashMap<>();
-        List<Object> allTeamsAndTeamMembersListTemp = new ArrayList<>();
-
-        ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
+    public Map<String, List<TeamMember>> getAllTeamMembersMap() throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
-
-        List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
         List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
 
-        for (DocumentSnapshot teamsDocument : allTeamsDocuments) {
-            allTeamsAndTeamMembersListTemp.add(teamsDocument.toObject(Team.class));
-
-            for(DocumentSnapshot teamMember : teamMemberDocuments){
-                allTeamsAndTeamMembersListTemp.add(teamMember.toObject(TeamMember.class));
-            }
-
-            allTeamsAndTeamMembersList.put(teamsDocument.getId(), allTeamsAndTeamMembersListTemp);
-            System.out.println("this is the object: " + allTeamsAndTeamMembersList);
-            System.out.println("this is the temp object: " + allTeamsAndTeamMembersListTemp);
-            allTeamsAndTeamMembersListTemp.clear();
-        }
-
-        System.out.println("this is before the return: " + allTeamsAndTeamMembersList);
-        return allTeamsAndTeamMembersList;
+        return teamMemberDocuments.stream()
+                .map(a -> a.toObject(TeamMember.class))
+                .collect(Collectors.groupingBy(TeamMember::getTeamName));
     }
 
     public Map<String, Object> getTeamById(final String id, final Team team, final TeamMember teamMember){

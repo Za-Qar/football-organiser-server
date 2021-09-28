@@ -6,7 +6,7 @@ import com.football.organiser.server.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -25,8 +25,8 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public Map<String, Object> getAllTeams() throws ExecutionException, InterruptedException {
-        return teamRepository.getAllTeamsAndTeamMembersList();
+    public Map<String, List<TeamMember>> getAllTeamMembers() throws ExecutionException, InterruptedException {
+        return teamRepository.getAllTeamMembersMap();
     }
 
     @Override

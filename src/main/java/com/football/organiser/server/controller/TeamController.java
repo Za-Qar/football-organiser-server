@@ -1,9 +1,7 @@
 package com.football.organiser.server.controller;
 
-import com.football.organiser.server.models.Chat;
 import com.football.organiser.server.models.Team;
 import com.football.organiser.server.models.TeamMember;
-import com.football.organiser.server.services.ChatService;
 import com.football.organiser.server.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +36,7 @@ public class TeamController {
     }
 
     @GetMapping
-    public Map<String, Object> getAllTeams() throws ExecutionException, InterruptedException {
-        return teamService.getAllTeams();
+    public Map<String, List<TeamMember>> getAllTeams() throws ExecutionException, InterruptedException {
+        return teamService.getAllTeamMembers();
     }
 }
