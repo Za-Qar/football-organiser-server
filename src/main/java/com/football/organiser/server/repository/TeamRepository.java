@@ -8,7 +8,6 @@ import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,18 +74,13 @@ public class TeamRepository {
         return teamMemberData;
     }
 
-    public Map<String, List<Team>> getAllTeams() throws ExecutionException, InterruptedException {
+    public List<Team> getAllTeams() throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
 
-        allTeamsDocuments.stream()
-                .map(a -> a.toObject(Team.class))
-                .collect(Collectors.groupingBy(Team::getTeamName))
-                .forEach((a, b) -> System.out.println(a));
-
         return allTeamsDocuments.stream()
                 .map(a -> a.toObject(Team.class))
-                .collect(Collectors.groupingBy(Team::getTeamName));
+                .collect(Collectors.toList());
     }
 
     public Map<String, Object> getTeamById(final String id, final Team team, final TeamMember teamMember){
