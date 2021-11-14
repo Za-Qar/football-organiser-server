@@ -20,9 +20,9 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping(path = "{/group}")
-    public List<Chat> getChatByGroup(@PathVariable("group") final String group) {
-        return chatService.getChatByGroupName();
+    @GetMapping(path = "/{group}")
+    public List<Chat> getChatByGroup(@PathVariable("group") final String group) throws ExecutionException, InterruptedException {
+        return chatService.getChatByGroupName(group);
     }
 
     @PostMapping

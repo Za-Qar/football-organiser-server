@@ -2,10 +2,18 @@ package com.football.organiser.server.repository;
 
 import com.football.organiser.server.database.FirestoreDatabase;
 import com.football.organiser.server.models.Chat;
+import com.football.organiser.server.models.TeamMember;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ChatRepository {
@@ -18,43 +26,22 @@ public class ChatRepository {
         return false;
     }
 
-    public List<Chat> getChatByGroupName() {
+    public List<Chat> getChatByGroupName(String group) throws ExecutionException, InterruptedException {
+        System.out.println("this is the group name: " + group);
+        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(group).collection("messages").get();
+        List<QueryDocumentSnapshot> chatMessages = queryAllTeamMembers.get().getDocuments();
+
+        final List<Chat> chatStream = chatMessages.stream().map(a -> a.toObject(Chat.class)).collect(Collectors.toList());
+
+        System.out.println(chatStream.get(0).getText());
+
         return null;
     }
 
-//    public boolean createGroup() throws ExecutionException, InterruptedException {
-//
-//        // Add document data  with id "alovelace" using a hashmap
-//        Map<String, Object> docData = new HashMap<>();
-//        docData.put("bham", "league");
-//        docData.put("data", "test");
-//        docData.put("born", 1995);
-//
-//        Map<String, String> messageData = new HashMap<>();
-//        messageData.put("1", "Hello");
-//        messageData.put("2", "Sup");
-//        messageData.put("3", "Yo");
-//
-//
-//        System.out.println("step 1");
-//        DocumentReference docRef = db.collection("groups").document("bham superleague");
-//
-//        DocumentReference messageRef = db.collection("groups").document("bham superleague").collection("messages").document("texts");
-//
-//
-//        System.out.println("step 2");
-//        //asynchronously write data
-//        ApiFuture<WriteResult> docResult = docRef.set(docData);
-//        ApiFuture<WriteResult> messageResult = messageRef.set(messageData);
-//
-//
-//
-//        System.out.println("step 4");
-////         ...
-////         result.get() blocks on response
-//        System.out.println("Update time : " + docResult.get().getUpdateTime());
-//        System.out.println("Update time : " + messageResult.get().getUpdateTime());
-//
-//        return true;
-//    }
 }
+
+
+
+//        return teamMemberDocuments.stream()
+//                .map(a -> a.toObject(TeamMember.class))
+//                .collect(Collectors.groupingBy(TeamMember::getTeamName));

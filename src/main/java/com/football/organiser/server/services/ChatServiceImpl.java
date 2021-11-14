@@ -29,8 +29,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Chat> getChatByGroupName() {
-        return chatRepository.getChatByGroupName();
+    public List<Chat> getChatByGroupName(String group) throws ExecutionException, InterruptedException {
+        return chatRepository.getChatByGroupName(group);
     }
 
     @Override
