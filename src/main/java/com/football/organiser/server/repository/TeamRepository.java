@@ -1,6 +1,7 @@
 package com.football.organiser.server.repository;
 
 import com.football.organiser.server.database.FirestoreDatabase;
+import com.football.organiser.server.exceptions.SafeGuardException;
 import com.football.organiser.server.models.Team;
 import com.football.organiser.server.models.TeamMember;
 import com.google.api.core.ApiFuture;
@@ -28,11 +29,13 @@ public class TeamRepository {
         teamData.put("teamName", team.getTeamName());
         teamData.put("country", team.getCountry());
         teamData.put("teamCaptain", team.getTeamCaptain());
+        teamData.put("description", team.getDescription());
+        teamData.put("gameType", team.getGameType());
         teamData.put("uuid", team.getUuid());
 
         // I can put team.getTeamName() as an argument for .document() to make the teams document name as the team name
         // without it, a uid will be automatically generated
-        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document();
+        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(team.getTeamName());
 
         //asynchronously write data
         ApiFuture<WriteResult> populateCreatedGroupCollection = createGroupCollection.set(teamData);
@@ -40,13 +43,7 @@ public class TeamRepository {
         // result.get() blocks on response
         populateCreatedGroupCollection.get();
 
-        Map<String, Object> createdTeam = new HashMap<>();
-        createdTeam.put("teamName", team.getTeamName());
-        createdTeam.put("country", team.getCountry());
-        teamData.put("teamCaptain", team.getTeamCaptain());
-        teamData.put("uuid", team.getUuid());
-
-        return createdTeam;
+        return teamData;
     }
 
     public Map<String, Object> addPlayersToGroup(final TeamMember teamMember) throws ExecutionException, InterruptedException {

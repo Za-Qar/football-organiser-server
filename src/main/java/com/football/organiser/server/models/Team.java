@@ -6,11 +6,17 @@ public class Team {
     private String teamName;
     private String country;
     private String teamCaptain;
+    private String description;
+    private String gameType;
     private String uuid;
 
-    public Team(final String teamName, final String country) {
+    public Team(String teamName, String country, String teamCaptain, String description, String gameType, String uuid) {
         this.teamName = teamName;
         this.country = country;
+        this.teamCaptain = teamCaptain;
+        this.description = description;
+        this.gameType = gameType;
+        this.uuid = uuid;
     }
 
     public Team() {
@@ -26,6 +32,14 @@ public class Team {
 
     public String getTeamCaptain() {
         return teamCaptain;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getGameType() {
+        return gameType;
     }
 
     public String getUuid() {
@@ -44,6 +58,14 @@ public class Team {
         this.teamCaptain = teamCaptain;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setGameType(String gameType) {
+        this.gameType = gameType;
+    }
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -54,7 +76,9 @@ public class Team {
                 "teamName='" + teamName + '\'' +
                 ", country='" + country + '\'' +
                 ", teamCaptain='" + teamCaptain + '\'' +
-                ", uuid=" + uuid +
+                ", description='" + description + '\'' +
+                ", gameType='" + gameType + '\'' +
+                ", uuid='" + uuid + '\'' +
                 '}';
     }
 
@@ -63,11 +87,11 @@ public class Team {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Team team = (Team) o;
-        return teamName.equals(team.teamName) && country.equals(team.country) && teamCaptain.equals(team.teamCaptain) && uuid.equals(team.uuid);
+        return Objects.equals(teamName, team.teamName) && Objects.equals(country, team.country) && Objects.equals(teamCaptain, team.teamCaptain) && Objects.equals(description, team.description) && Objects.equals(gameType, team.gameType) && Objects.equals(uuid, team.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(teamName, country, teamCaptain, uuid);
+        return Objects.hash(teamName, country, teamCaptain, description, gameType, uuid);
     }
 }
