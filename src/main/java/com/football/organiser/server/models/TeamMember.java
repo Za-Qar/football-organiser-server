@@ -1,94 +1,90 @@
 package com.football.organiser.server.models;
 
 public class TeamMember {
-
-    private String teamMemberName;
     private String joinedTimeStamp;
+    private int phoneNumber;
     private String photoUrl;
-    private String uuid;
-    private String location;
-    private String phoneNumber;
-    private String teamName;
+    private String teamMemberName;
+    private String teamMemberEmail;
+    private String teamNameToJoin;
+    private String uid;
+    private String gender;
 
-    public TeamMember(String teamMemberName, String joinedTimeStamp, String photoUrl, String uuid, String location, String phoneNumber, String teamName) {
-        this.teamMemberName = teamMemberName;
+
+    public TeamMember(String joinedTimeStamp, int phoneNumber, String photoUrl, String teamMemberName, String teamMemberEmail, String teamNameToJoin, String uid, String gender) {
         this.joinedTimeStamp = joinedTimeStamp;
-        this.photoUrl = photoUrl;
-        this.uuid = uuid;
-        this.location = location;
         this.phoneNumber = phoneNumber;
-        this.teamName = teamName;
+        this.photoUrl = photoUrl;
+        this.teamMemberName = teamMemberName;
+        this.teamMemberEmail = teamMemberEmail;
+        this.teamNameToJoin = teamNameToJoin;
+        this.uid = uid;
+        this.gender = gender;
     }
 
     public TeamMember(){}
 
-    public String getTeamMemberName() {
-        return teamMemberName;
-    }
-
     public String getJoinedTimeStamp() {
         return joinedTimeStamp;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamMemberName(String teamMemberName) {
-        this.teamMemberName = teamMemberName;
     }
 
     public void setJoinedTimeStamp(String joinedTimeStamp) {
         this.joinedTimeStamp = joinedTimeStamp;
     }
 
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public String getTeamMemberName() {
+        return teamMemberName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setTeamMemberName(String teamMemberName) {
+        this.teamMemberName = teamMemberName;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public String getTeamMemberEmail() {
+        return teamMemberEmail;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public void setTeamMemberEmail(String teamMemberEmail) {
+        this.teamMemberEmail = teamMemberEmail;
     }
 
-    @Override
-    public String toString() {
-        return "TeamMember{" +
-                "teamMemberName='" + teamMemberName + '\'' +
-                ", joinedTimeStamp='" + joinedTimeStamp + '\'' +
-                ", photoUrl='" + photoUrl + '\'' +
-                ", uuid='" + uuid + '\'' +
-                ", location='" + location + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", teamName='" + teamName + '\'' +
-                '}';
+    public String getTeamNameToJoin() {
+        return teamNameToJoin;
     }
 
+    public void setTeamNameToJoin(String teamNameToJoin) {
+        this.teamNameToJoin = teamNameToJoin;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

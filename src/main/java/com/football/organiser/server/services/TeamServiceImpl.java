@@ -47,6 +47,6 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public Map<String, Object> addPlayersToGroup(TeamMember teamMember) throws ExecutionException, InterruptedException {
-        return teamRepository.addPlayersToGroup(teamMember);
+        return teamRepository.addPlayersToTeam(teamMember);
     }
 }

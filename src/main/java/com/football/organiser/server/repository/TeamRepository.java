@@ -26,12 +26,16 @@ public class TeamRepository {
 
         // Add document data  with id "team.getTeamName()
         Map<String, Object> teamData = new HashMap<>();
-        teamData.put("teamName", team.getTeamName());
         teamData.put("country", team.getCountry());
         teamData.put("teamCaptain", team.getTeamCaptain());
-        teamData.put("description", team.getDescription());
+        teamData.put("teamCaptainEmail", team.getTeamCaptainEmail());
+        teamData.put("teamCaptainPhotoUrl", team.getTeamCaptainPhotoUrl());
+        teamData.put("teamName", team.getTeamName());
+        teamData.put("uuid", team.getUid());
+        teamData.put("groupImage", team.getGroupImage());
+        teamData.put("isPublic", team.getPublic());
         teamData.put("gameType", team.getGameType());
-        teamData.put("uuid", team.getUuid());
+        teamData.put("description", team.getDescription());
 
         // I can put team.getTeamName() as an argument for .document() to make the teams document name as the team name
         // without it, a uid will be automatically generated
@@ -46,21 +50,23 @@ public class TeamRepository {
         return teamData;
     }
 
-    public Map<String, Object> addPlayersToGroup(final TeamMember teamMember) throws ExecutionException, InterruptedException {
+    public Map<String, Object> addPlayersToTeam(final TeamMember teamMember) throws ExecutionException, InterruptedException {
+
+        System.out.println("this is teamMember: " + teamMember);
 
         // data model 1, teams members are sub collections
         // Add document data
         Map<String, Object> teamMemberData = new HashMap<>();
-        teamMemberData.put("teamMemberName", teamMember.getTeamName());
         teamMemberData.put("joinedTimeStamp", teamMember.getJoinedTimeStamp());
-        teamMemberData.put("photoUrl", teamMember.getPhotoUrl());
-        teamMemberData.put("uuid", teamMember.getUuid());
-        teamMemberData.put("location", teamMember.getLocation());
         teamMemberData.put("phoneNumber", teamMember.getPhoneNumber());
-        teamMemberData.put("teamName", teamMember.getTeamName());
+        teamMemberData.put("photoUrl", teamMember.getPhotoUrl());
+        teamMemberData.put("teamMemberName", teamMember.getTeamMemberName());
+        teamMemberData.put("teamMemberEmail", teamMember.getTeamMemberEmail());
+        teamMemberData.put("teamNameToJoin", teamMember.getTeamNameToJoin());
+        teamMemberData.put("uid", teamMember.getUid());
+        teamMemberData.put("gender", teamMember.getGender());
 
-
-        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamName()).collection("teamMembers").document();
+        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamNameToJoin()).collection("teamMembers").document();
 
         //asynchronously write data
         ApiFuture<WriteResult> populateCreatedGroupCollection = createGroupCollection.set(teamMemberData);

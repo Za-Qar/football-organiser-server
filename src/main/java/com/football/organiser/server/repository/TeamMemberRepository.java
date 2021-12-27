@@ -25,6 +25,6 @@ public class TeamMemberRepository
 
         return teamMemberDocuments.stream()
                 .map(a -> a.toObject(TeamMember.class))
-                .collect(Collectors.groupingBy(TeamMember::getTeamName));
+                .collect(Collectors.groupingBy(TeamMember::getTeamNameToJoin));
     }
 }
