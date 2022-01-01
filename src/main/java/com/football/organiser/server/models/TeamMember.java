@@ -2,7 +2,7 @@ package com.football.organiser.server.models;
 
 public class TeamMember {
     private String joinedTimeStamp;
-    private int phoneNumber;
+    private long phoneNumber;
     private String photoUrl;
     private String teamMemberName;
     private String teamMemberEmail;
@@ -32,11 +32,11 @@ public class TeamMember {
         this.joinedTimeStamp = joinedTimeStamp;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -6,19 +6,19 @@ public class Team {
     private String teamCaptainEmail;
     private String teamCaptainPhotoUrl;
     private String teamName;
-    private String uid;
+    private String uuid;
     private String groupImage;
     private Boolean isPublic;
     private String gameType;
     private String description;
 
-    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uid, String groupImage, Boolean isPublic, String gameType, String description) {
+    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uuid, String groupImage, Boolean isPublic, String gameType, String description) {
         this.country = country;
         this.teamCaptain = teamCaptain;
         this.teamCaptainEmail = teamCaptainEmail;
         this.teamCaptainPhotoUrl = teamCaptainPhotoUrl;
         this.teamName = teamName;
-        this.uid = uid;
+        this.uuid = uuid;
         this.groupImage = groupImage;
         this.isPublic = isPublic;
         this.gameType = gameType;
@@ -68,12 +68,12 @@ public class Team {
         this.teamName = teamName;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getGroupImage() {

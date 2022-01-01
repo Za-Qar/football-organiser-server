@@ -19,8 +19,19 @@ public class TeamMemberRepository
     @Autowired
     FirestoreDatabase firestoreDatabase;
 
-    public Map<String, List<TeamMember>> getAllTeamMembersMap() throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document("Zaid's group").collection("teamMembers").get();
+    public List<TeamMember> getAllTeamMembersInGivenTeam(final String teamName) throws ExecutionException, InterruptedException {
+
+        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
+        List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
+
+        return teamMemberDocuments.stream()
+                .map(a -> a.toObject(TeamMember.class))
+                .collect(Collectors.toList());
+    }
+
+
+    public Map<String, List<TeamMember>> getAllTeamMembersInGivenTeam2(final String teamName) throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
         List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
 
         return teamMemberDocuments.stream()

@@ -1,7 +1,6 @@
 package com.football.organiser.server.repository;
 
 import com.football.organiser.server.database.FirestoreDatabase;
-import com.football.organiser.server.exceptions.SafeGuardException;
 import com.football.organiser.server.models.Team;
 import com.football.organiser.server.models.TeamMember;
 import com.google.api.core.ApiFuture;
@@ -9,9 +8,7 @@ import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -31,7 +28,7 @@ public class TeamRepository {
         teamData.put("teamCaptainEmail", team.getTeamCaptainEmail());
         teamData.put("teamCaptainPhotoUrl", team.getTeamCaptainPhotoUrl());
         teamData.put("teamName", team.getTeamName());
-        teamData.put("uuid", team.getUid());
+        teamData.put("uuid", team.getUuid());
         teamData.put("groupImage", team.getGroupImage());
         teamData.put("isPublic", team.getPublic());
         teamData.put("gameType", team.getGameType());
@@ -58,7 +55,7 @@ public class TeamRepository {
         // Add document data
         Map<String, Object> teamMemberData = new HashMap<>();
         teamMemberData.put("joinedTimeStamp", teamMember.getJoinedTimeStamp());
-        teamMemberData.put("phoneNumber", teamMember.getPhoneNumber());
+        teamMemberData.put("phoneNumber", Long.parseLong(String.valueOf(teamMember.getPhoneNumber())));
         teamMemberData.put("photoUrl", teamMember.getPhotoUrl());
         teamMemberData.put("teamMemberName", teamMember.getTeamMemberName());
         teamMemberData.put("teamMemberEmail", teamMember.getTeamMemberEmail());
@@ -81,8 +78,65 @@ public class TeamRepository {
         ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
 
+//        this.getFilterUserJoinedTeams("b8II3O2z8ESsmKD9A5uXdwd1ejQ2");
+
         return allTeamsDocuments.stream()
                 .map(a -> a.toObject(Team.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<Team> getFilterUserJoinedTeams(final String teamMemberUid) throws ExecutionException, InterruptedException {
+
+        System.out.println("received: " + teamMemberUid);
+
+        List<String> teamNames = this.getAllTeamNames();
+
+        List<String> allTeamNames = new ArrayList<>();
+        List<Team> allTeamJoinedByUser = new ArrayList<>();
+
+        teamNames.forEach(teamName -> {
+                try {
+                   final TeamMember teamMember = this.getFilterUserJoinedTeamMembers(teamMemberUid, teamName);
+                   if(teamMember != null){
+                    allTeamNames.add(teamMember.getTeamNameToJoin());
+                   }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        );
+
+        for(String teamName : allTeamNames){
+            Team team = this.getTeamByName(teamName);
+            allTeamJoinedByUser.add(team);
+        }
+
+        return allTeamJoinedByUser;
+    }
+
+    private TeamMember getFilterUserJoinedTeamMembers(final String teamMemberUid, final String teamName) throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> createGroupCollection = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
+        List<QueryDocumentSnapshot> allTeamsDocuments = createGroupCollection.get().getDocuments();
+
+        // The following will also work to get the required object from a list
+        // .filter(a -> Objects.equal(a.getUid(), "b8II3O2z8ESsmKD9A5uXdwd1ejQ2"))
+        return allTeamsDocuments.stream()
+                .map(a -> a.toObject(TeamMember.class))
+                .filter(a -> a.getUid().equals(teamMemberUid))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Team getTeamByName(final String teamName) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> getTeam = firestoreDatabase.db.collection("teams").document(teamName).get();
+        return getTeam.get().toObject(Team.class);
+    }
+
+    private List<String> getAllTeamNames() throws ExecutionException, InterruptedException {
+        List<Team> getAllTeams = this.getAllTeams();
+
+        return getAllTeams.stream()
+                .map(Team::getTeamName)
                 .collect(Collectors.toList());
     }
 
@@ -100,7 +154,7 @@ public class TeamRepository {
         return teamDataToUpdate;
     }
 
-    public static <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
+    private static <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
         return IntStream.range(0, keys.size()).boxed()
                 .collect(Collectors.toMap(keys::get, values::get));
     }

@@ -7,5 +7,5 @@ import com.football.organiser.server.models.TeamMember;
 
 public interface TeamMemberService
 {
-    Map<String, List<TeamMember>> getAllTeamMembers() throws ExecutionException, InterruptedException;
+    List<TeamMember>  getAllTeamMembersInGivenTeam(final String teamName) throws ExecutionException, InterruptedException;
 }

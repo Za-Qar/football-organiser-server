@@ -31,6 +31,11 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    public List<Team> getFilterUserJoinedTeams(final String teamMemberUid) throws ExecutionException, InterruptedException {
+        return teamRepository.getFilterUserJoinedTeams(teamMemberUid);
+    }
+
+    @Override
     public Map<String, Object> getTeamById(int id) {
         return null;
     }

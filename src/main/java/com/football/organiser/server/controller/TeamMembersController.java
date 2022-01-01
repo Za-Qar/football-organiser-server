@@ -4,10 +4,7 @@ import com.football.organiser.server.models.TeamMember;
 import com.football.organiser.server.services.TeamMemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -24,8 +21,9 @@ public class TeamMembersController
         this.teamMemberService = teamMemberService;
     }
 
-    @GetMapping
-    public Map<String, List<TeamMember>> getAllTeamMembers() throws ExecutionException, InterruptedException {
-        return teamMemberService.getAllTeamMembers();
+    @GetMapping("/{teamName}")
+    public List<TeamMember>  getAllTeamMembersInGivenTeam(@PathVariable("teamName") final String teamName) throws ExecutionException, InterruptedException {
+        System.out.println("received: " + teamName);
+        return teamMemberService.getAllTeamMembersInGivenTeam(teamName);
     }
 }

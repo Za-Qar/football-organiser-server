@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -38,5 +39,10 @@ public class TeamController {
     @GetMapping
     public List<Team> getAllTeams() throws ExecutionException, InterruptedException {
         return teamService.getAllTeams();
+    }
+
+    @GetMapping("/{teamMemberUid}")
+    public List<Team> getFilterUserJoinedTeams(@PathVariable final String teamMemberUid) throws ExecutionException, InterruptedException {
+        return teamService.getFilterUserJoinedTeams(teamMemberUid);
     }
 }
