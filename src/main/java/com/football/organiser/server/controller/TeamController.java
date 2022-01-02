@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -16,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/teams")
 public class TeamController {
 
-    public TeamService teamService;
+    private final TeamService teamService;
 
     @Autowired
     public TeamController(TeamService teamService) {
