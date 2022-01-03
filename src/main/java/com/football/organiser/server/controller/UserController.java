@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping(path = "/{email}")
     public User getUserByEmailIfExits(@PathVariable("email") final String email) throws ExecutionException, InterruptedException {
-        return userService.getUserByEmailIfExits(email);
+        return userService.getUserByEmailIfExits(email.toLowerCase(Locale.ROOT));
     }
 
     @PostMapping(path = "/createUser")

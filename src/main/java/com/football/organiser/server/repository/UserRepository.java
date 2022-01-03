@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -35,7 +36,7 @@ public class UserRepository {
         // Add document data  with id "team.getTeamName()
         Map<String, Object> userData = new HashMap<>();
         userData.put("name", user.getName());
-        userData.put("email", user.getEmail());
+        userData.put("email", user.getEmail().toLowerCase(Locale.ROOT));
         userData.put("uid", user.getUid());
         userData.put("photoUrl", user.getPhotoUrl());
         userData.put("teamsJoined", user.getTeamsJoined());

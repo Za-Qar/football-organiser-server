@@ -25,9 +25,9 @@ public class TeamRepository {
         Map<String, Object> teamData = new HashMap<>();
         teamData.put("country", team.getCountry());
         teamData.put("teamCaptain", team.getTeamCaptain());
-        teamData.put("teamCaptainEmail", team.getTeamCaptainEmail());
+        teamData.put("teamCaptainEmail", team.getTeamCaptainEmail().toLowerCase(Locale.ROOT));
         teamData.put("teamCaptainPhotoUrl", team.getTeamCaptainPhotoUrl());
-        teamData.put("teamName", team.getTeamName());
+        teamData.put("teamName", team.getTeamName().toLowerCase(Locale.ROOT));
         teamData.put("uuid", team.getUuid());
         teamData.put("groupImage", team.getGroupImage());
         teamData.put("isPublic", team.getPublic());
@@ -57,8 +57,8 @@ public class TeamRepository {
         teamMemberData.put("joinedTimeStamp", teamMember.getJoinedTimeStamp());
         teamMemberData.put("phoneNumber", Long.parseLong(String.valueOf(teamMember.getPhoneNumber())));
         teamMemberData.put("photoUrl", teamMember.getPhotoUrl());
-        teamMemberData.put("teamMemberName", teamMember.getTeamMemberName());
-        teamMemberData.put("teamMemberEmail", teamMember.getTeamMemberEmail());
+        teamMemberData.put("teamMemberName", teamMember.getTeamMemberName().toLowerCase(Locale.ROOT));
+        teamMemberData.put("teamMemberEmail", teamMember.getTeamMemberEmail().toLowerCase(Locale.ROOT));
         teamMemberData.put("teamNameToJoin", teamMember.getTeamNameToJoin());
         teamMemberData.put("uid", teamMember.getUid());
         teamMemberData.put("gender", teamMember.getGender());

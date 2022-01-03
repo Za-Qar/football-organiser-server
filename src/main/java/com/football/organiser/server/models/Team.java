@@ -32,56 +32,28 @@ public class Team {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getTeamCaptain() {
         return teamCaptain;
-    }
-
-    public void setTeamCaptain(String teamCaptain) {
-        this.teamCaptain = teamCaptain;
     }
 
     public String getTeamCaptainEmail() {
         return teamCaptainEmail;
     }
 
-    public void setTeamCaptainEmail(String teamCaptainEmail) {
-        this.teamCaptainEmail = teamCaptainEmail;
-    }
-
     public String getTeamCaptainPhotoUrl() {
         return teamCaptainPhotoUrl;
-    }
-
-    public void setTeamCaptainPhotoUrl(String teamCaptainPhotoUrl) {
-        this.teamCaptainPhotoUrl = teamCaptainPhotoUrl;
     }
 
     public String getTeamName() {
         return teamName;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
     public String getGroupImage() {
         return groupImage;
-    }
-
-    public void setGroupImage(String groupImage) {
-        this.groupImage = groupImage;
     }
 
     public Boolean getPublic() {
@@ -96,15 +68,7 @@ public class Team {
         return gameType;
     }
 
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

@@ -5,6 +5,7 @@ import com.football.organiser.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserByEmailIfExits(String email) throws ExecutionException, InterruptedException {
-        return userRespository.getUserByEmailIfExits(email);
+        return userRespository.getUserByEmailIfExits(email.toLowerCase(Locale.ROOT));
     }
 
     @Override

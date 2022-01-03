@@ -23,7 +23,6 @@ public class TeamMembersController
 
     @GetMapping("/{teamName}")
     public List<TeamMember>  getAllTeamMembersInGivenTeam(@PathVariable("teamName") final String teamName) throws ExecutionException, InterruptedException {
-        System.out.println("received: " + teamName);
-        return teamMemberService.getAllTeamMembersInGivenTeam(teamName);
+        return teamMemberService.getAllTeamMembersInGivenTeam(teamName.toLowerCase(Locale.ROOT));
     }
 }
