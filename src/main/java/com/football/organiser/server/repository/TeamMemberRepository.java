@@ -28,14 +28,4 @@ public class TeamMemberRepository
                 .map(a -> a.toObject(TeamMember.class))
                 .collect(Collectors.toList());
     }
-
-
-    public Map<String, List<TeamMember>> getAllTeamMembersInGivenTeam2(final String teamName) throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
-        List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
-
-        return teamMemberDocuments.stream()
-                .map(a -> a.toObject(TeamMember.class))
-                .collect(Collectors.groupingBy(TeamMember::getTeamNameToJoin));
-    }
 }

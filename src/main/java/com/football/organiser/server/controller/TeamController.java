@@ -24,14 +24,12 @@ public class TeamController {
 
     @PostMapping("/createTeam")
     public Team createTeam(@RequestBody final Team teamDetails) throws ExecutionException, InterruptedException {
-        System.out.println("createTeam post request has gone through");
         teamService.createTeam(teamDetails);
         return teamDetails;
     }
 
     @PostMapping("/addPlayerToTeam")
     public Map<String, Object> addPlayerToTeam(@RequestBody final TeamMember teamMember) throws ExecutionException, InterruptedException {
-        System.out.println("addplayertoteam post has gone through");
         return teamService.addPlayersToGroup(teamMember);
     }
 

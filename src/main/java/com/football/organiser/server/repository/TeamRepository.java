@@ -114,6 +114,25 @@ public class TeamRepository {
         return allTeamJoinedByUser;
     }
 
+    public List<Team> getAllUserJoinedTeams(final List<String> teamNames) throws ExecutionException, InterruptedException {
+
+        List<Team> allTeamJoinedByUser = new ArrayList<>();
+
+        teamNames.forEach(teamName -> {
+                    try {
+                        final Team team = this.getTeamByName(teamName);
+                        if(team != null){
+                            allTeamJoinedByUser.add(team);
+                        }
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
+        return allTeamJoinedByUser;
+    }
+
     private TeamMember getFilterUserJoinedTeamMembers(final String teamMemberUid, final String teamName) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> createGroupCollection = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = createGroupCollection.get().getDocuments();
