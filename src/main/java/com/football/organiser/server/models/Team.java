@@ -56,12 +56,8 @@ public class Team {
         return groupImage;
     }
 
-    public Boolean getPublic() {
+    public Boolean getIsPublic() {
         return isPublic;
-    }
-
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
     }
 
     public String getGameType() {

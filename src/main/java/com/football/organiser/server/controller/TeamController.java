@@ -42,4 +42,11 @@ public class TeamController {
     public List<Team> getFilterUserJoinedTeams(@PathVariable final String teamMemberUid) throws ExecutionException, InterruptedException {
         return teamService.getFilterUserJoinedTeams(teamMemberUid);
     }
+
+    @PostMapping("/joinedTeams")
+    public List<Team> getAllUserJoinedTeams(@RequestBody final List<String> teamNamesList) throws ExecutionException, InterruptedException {
+        System.out.println("these are team names: " + teamNamesList.get(0));
+        return teamService.getAllUserJoinedTeams(teamNamesList);
+    }
+
 }

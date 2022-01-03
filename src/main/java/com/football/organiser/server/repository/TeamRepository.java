@@ -30,7 +30,7 @@ public class TeamRepository {
         teamData.put("teamName", team.getTeamName().toLowerCase(Locale.ROOT));
         teamData.put("uuid", team.getUuid());
         teamData.put("groupImage", team.getGroupImage());
-        teamData.put("isPublic", team.getPublic());
+        teamData.put("isPublic", team.getIsPublic());
         teamData.put("gameType", team.getGameType());
         teamData.put("description", team.getDescription());
 
@@ -86,9 +86,6 @@ public class TeamRepository {
     }
 
     public List<Team> getFilterUserJoinedTeams(final String teamMemberUid) throws ExecutionException, InterruptedException {
-
-        System.out.println("received: " + teamMemberUid);
-
         List<String> teamNames = this.getAllTeamNames();
 
         List<String> allTeamNames = new ArrayList<>();
@@ -120,7 +117,7 @@ public class TeamRepository {
 
         teamNames.forEach(teamName -> {
                     try {
-                        final Team team = this.getTeamByName(teamName);
+                        final Team team = this.getTeamByName(teamName.toLowerCase(Locale.ROOT));
                         if(team != null){
                             allTeamJoinedByUser.add(team);
                         }
