@@ -1,10 +1,12 @@
 package com.football.organiser.server.repository;
 
 import com.football.organiser.server.database.FirestoreDatabase;
+import com.football.organiser.server.models.TeamInfoInUser;
 import com.football.organiser.server.models.User;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.WriteResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,5 +54,19 @@ public class UserRepository {
         // result.get() blocks on response
         populateCreatedGroupCollection.get();
         return user;
+    }
+
+    public WriteResult addTeamNameToUser(final TeamInfoInUser info) throws ExecutionException, InterruptedException {
+        DocumentReference userDocRef = firestoreDatabase.db.collection("users").document(info.getEmail().toLowerCase(Locale.ROOT));
+        ApiFuture<WriteResult> arrayUnion = userDocRef.update("teamsJoined",
+                FieldValue.arrayUnion(info.getTeamName().toLowerCase(Locale.ROOT)));
+        return arrayUnion.get();
+    }
+
+    public WriteResult removeTeamNameFromUser(final TeamInfoInUser info) throws ExecutionException, InterruptedException {
+        DocumentReference userDocRef = firestoreDatabase.db.collection("users").document(info.getEmail().toLowerCase(Locale.ROOT));
+        ApiFuture<WriteResult> arrayRm = userDocRef.update("teamsJoined",
+                FieldValue.arrayRemove(info.getTeamName().toLowerCase(Locale.ROOT)));
+        return arrayRm.get();
     }
 }
