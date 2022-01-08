@@ -1,7 +1,7 @@
 package com.football.organiser.server.controller;
 
 import com.football.organiser.server.database.FirestoreDatabase;
-import com.football.organiser.server.models.EmailTeamName;
+import com.football.organiser.server.models.TeamInfoInUser;
 import com.football.organiser.server.models.User;
 import com.football.organiser.server.services.UserService;
 import com.google.api.core.ApiFuture;
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "/patchUser/addTeamToUser")
-    public WriteResult addTeamNameToUser(@RequestBody final EmailTeamName info) throws ExecutionException, InterruptedException {
+    public WriteResult addTeamNameToUser(@RequestBody final TeamInfoInUser info) throws ExecutionException, InterruptedException {
         DocumentReference userDocRef = firestoreDatabase.db.collection("users").document(info.getEmail().toLowerCase(Locale.ROOT));
         ApiFuture<WriteResult> arrayUnion = userDocRef.update("teamsJoined",
                 FieldValue.arrayUnion(info.getTeamName().toLowerCase(Locale.ROOT)));
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "/patchUser/removeTeamFromUser")
-    public WriteResult removeTeamNameFromUser(@RequestBody final EmailTeamName info) throws ExecutionException, InterruptedException {
+    public WriteResult removeTeamNameFromUser(@RequestBody final TeamInfoInUser info) throws ExecutionException, InterruptedException {
         DocumentReference userDocRef = firestoreDatabase.db.collection("users").document(info.getEmail().toLowerCase(Locale.ROOT));
         ApiFuture<WriteResult> arrayRm = userDocRef.update("teamsJoined",
                 FieldValue.arrayRemove(info.getTeamName().toLowerCase(Locale.ROOT)));

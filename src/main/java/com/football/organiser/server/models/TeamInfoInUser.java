@@ -1,10 +1,10 @@
 package com.football.organiser.server.models;
 
-public class EmailTeamName {
+public class TeamInfoInUser {
     private String email;
     private String teamName;
 
-    public EmailTeamName(String email, String teamName) {
+    public TeamInfoInUser(String email, String teamName) {
         this.email = email;
         this.teamName = teamName;
     }
