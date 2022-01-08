@@ -49,7 +49,8 @@ public class TeamRepository {
 
     public Map<String, Object> addPlayersToTeam(final TeamMember teamMember) throws ExecutionException, InterruptedException {
 
-        System.out.println("this is teamMember: " + teamMember);
+        System.out.println("player being added to team");
+        System.out.println("this is teamMember.getTeamNameToJoin(): " + teamMember.getTeamNameToJoin());
 
         // data model 1, teams members are sub collections
         // Add document data
@@ -63,7 +64,7 @@ public class TeamRepository {
         teamMemberData.put("uid", teamMember.getUid());
         teamMemberData.put("gender", teamMember.getGender());
 
-        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamNameToJoin()).collection("teamMembers").document();
+        DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamNameToJoin().toLowerCase(Locale.ROOT)).collection("teamMembers").document();
 
         //asynchronously write data
         ApiFuture<WriteResult> populateCreatedGroupCollection = createGroupCollection.set(teamMemberData);
@@ -86,6 +87,9 @@ public class TeamRepository {
     }
 
     public List<Team> getFilterUserJoinedTeams(final String teamMemberUid) throws ExecutionException, InterruptedException {
+
+        System.out.println("teamMemberUid: " + teamMemberUid);
+
         List<String> teamNames = this.getAllTeamNames();
 
         List<String> allTeamNames = new ArrayList<>();
@@ -130,6 +134,11 @@ public class TeamRepository {
         return allTeamJoinedByUser;
     }
 
+    public Team getTeamByName(final String teamName) throws ExecutionException, InterruptedException {
+        ApiFuture<DocumentSnapshot> getTeam = firestoreDatabase.db.collection("teams").document(teamName).get();
+        return getTeam.get().toObject(Team.class);
+    }
+
     private TeamMember getFilterUserJoinedTeamMembers(final String teamMemberUid, final String teamName) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> createGroupCollection = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = createGroupCollection.get().getDocuments();
@@ -141,11 +150,6 @@ public class TeamRepository {
                 .filter(a -> a.getUid().equals(teamMemberUid))
                 .findFirst()
                 .orElse(null);
-    }
-
-    private Team getTeamByName(final String teamName) throws ExecutionException, InterruptedException {
-        ApiFuture<DocumentSnapshot> getTeam = firestoreDatabase.db.collection("teams").document(teamName).get();
-        return getTeam.get().toObject(Team.class);
     }
 
     private List<String> getAllTeamNames() throws ExecutionException, InterruptedException {

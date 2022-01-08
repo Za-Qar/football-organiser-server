@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -45,8 +46,13 @@ public class TeamController {
 
     @PostMapping("/joinedTeams")
     public List<Team> getAllUserJoinedTeams(@RequestBody final List<String> teamNamesList) throws ExecutionException, InterruptedException {
-        System.out.println("these are team names: " + teamNamesList.get(0));
         return teamService.getAllUserJoinedTeams(teamNamesList);
+    }
+
+    @GetMapping("/getTeamByName/{teamName}")
+    public Team getTeamByName(@PathVariable final String teamName) throws ExecutionException, InterruptedException {
+        System.out.println("received teamName: " + teamName);
+        return teamService.getTeamByName(teamName.toLowerCase(Locale.ROOT));
     }
 
 }

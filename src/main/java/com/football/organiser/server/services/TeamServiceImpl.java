@@ -41,8 +41,8 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public Map<String, Object> getTeamById(int id) {
-        return null;
+    public Team getTeamByName(String teamName) throws ExecutionException, InterruptedException {
+        return teamRepository.getTeamByName(teamName);
     }
 
     @Override

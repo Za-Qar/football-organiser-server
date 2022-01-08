@@ -11,7 +11,7 @@ public interface TeamService {
     List<Team> getAllTeams() throws ExecutionException, InterruptedException;
     List<Team> getFilterUserJoinedTeams(final String teamMemberUid) throws ExecutionException, InterruptedException;
     List<Team> getAllUserJoinedTeams(final List<String> teamNames) throws ExecutionException, InterruptedException;
-    Map<String, Object> getTeamById(final int id);
+    Team getTeamByName(final String teamName) throws ExecutionException, InterruptedException;
     boolean updateTeamById(final int id);
     boolean deleteTeamById(final int id);
 
