@@ -55,4 +55,10 @@ public class TeamController {
         return teamService.getTeamByName(teamName.toLowerCase(Locale.ROOT));
     }
 
+//    @PostMapping("/joinedTeams")
+//    public Team addTeamMemberNameToTeam(@PathVariable final String teamName) throws ExecutionException, InterruptedException {
+//        System.out.println("received teamName: " + teamName);
+//        return teamService.getTeamByName(teamName.toLowerCase(Locale.ROOT));
+//    }
+
 }

@@ -33,6 +33,7 @@ public class TeamRepository {
         teamData.put("isPublic", team.getIsPublic());
         teamData.put("gameType", team.getGameType());
         teamData.put("description", team.getDescription());
+        teamData.put("teamMemberInfo", team.getTeamMemberInfo());
 
         // I can put team.getTeamName() as an argument for .document() to make the teams document name as the team name
         // without it, a uid will be automatically generated

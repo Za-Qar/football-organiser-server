@@ -11,8 +11,9 @@ public class Team {
     private Boolean isPublic;
     private String gameType;
     private String description;
+    private UserInfoInTeam teamMemberInfo;
 
-    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uuid, String groupImage, Boolean isPublic, String gameType, String description) {
+    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uuid, String groupImage, Boolean isPublic, String gameType, String description, UserInfoInTeam teamMemberInfo) {
         this.country = country;
         this.teamCaptain = teamCaptain;
         this.teamCaptainEmail = teamCaptainEmail;
@@ -23,10 +24,10 @@ public class Team {
         this.isPublic = isPublic;
         this.gameType = gameType;
         this.description = description;
+        this.teamMemberInfo = teamMemberInfo;
     }
 
     public Team() {}
-
 
     public String getCountry() {
         return country;
@@ -66,5 +67,9 @@ public class Team {
 
     public String getDescription() {
         return description;
+    }
+
+    public UserInfoInTeam getTeamMemberInfo() {
+        return teamMemberInfo;
     }
 }
