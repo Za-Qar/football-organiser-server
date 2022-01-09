@@ -15,5 +15,5 @@ public interface TeamService {
     boolean updateTeamById(final int id);
     boolean deleteTeamById(final int id);
 
-    Map<String, Object> addPlayersToGroup(final TeamMember teamMember) throws ExecutionException, InterruptedException;
+    Map<String, Object> addPlayersToTeam(final TeamMember teamMember) throws ExecutionException, InterruptedException;
 }

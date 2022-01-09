@@ -7,18 +7,18 @@ public class TeamMember {
     private String teamMemberName;
     private String teamMemberEmail;
     private String teamNameToJoin;
-    private String uid;
+    private String uuid;
     private String gender;
 
 
-    public TeamMember(String joinedTimeStamp, int phoneNumber, String photoUrl, String teamMemberName, String teamMemberEmail, String teamNameToJoin, String uid, String gender) {
+    public TeamMember(String joinedTimeStamp, int phoneNumber, String photoUrl, String teamMemberName, String teamMemberEmail, String teamNameToJoin, String uuid, String gender) {
         this.joinedTimeStamp = joinedTimeStamp;
         this.phoneNumber = phoneNumber;
         this.photoUrl = photoUrl;
         this.teamMemberName = teamMemberName;
         this.teamMemberEmail = teamMemberEmail;
         this.teamNameToJoin = teamNameToJoin;
-        this.uid = uid;
+        this.uuid = uuid;
         this.gender = gender;
     }
 
@@ -72,12 +72,12 @@ public class TeamMember {
         this.teamNameToJoin = teamNameToJoin;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getGender() {

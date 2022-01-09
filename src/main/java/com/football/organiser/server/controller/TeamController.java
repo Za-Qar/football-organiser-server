@@ -1,5 +1,6 @@
 package com.football.organiser.server.controller;
 
+import com.football.organiser.server.database.FirestoreDatabase;
 import com.football.organiser.server.models.Team;
 import com.football.organiser.server.models.TeamMember;
 import com.football.organiser.server.services.TeamService;
@@ -19,6 +20,9 @@ public class TeamController {
     private final TeamService teamService;
 
     @Autowired
+    FirestoreDatabase firestoreDatabase;
+
+    @Autowired
     public TeamController(TeamService teamService) {
         this.teamService = teamService;
     }
@@ -31,7 +35,7 @@ public class TeamController {
 
     @PostMapping("/addPlayerToTeam")
     public Map<String, Object> addPlayerToTeam(@RequestBody final TeamMember teamMember) throws ExecutionException, InterruptedException {
-        return teamService.addPlayersToGroup(teamMember);
+        return teamService.addPlayersToTeam(teamMember);
     }
 
     @GetMapping
@@ -51,14 +55,6 @@ public class TeamController {
 
     @GetMapping("/getTeamByName/{teamName}")
     public Team getTeamByName(@PathVariable final String teamName) throws ExecutionException, InterruptedException {
-        System.out.println("received teamName: " + teamName);
         return teamService.getTeamByName(teamName.toLowerCase(Locale.ROOT));
     }
-
-//    @PostMapping("/joinedTeams")
-//    public Team addTeamMemberNameToTeam(@PathVariable final String teamName) throws ExecutionException, InterruptedException {
-//        System.out.println("received teamName: " + teamName);
-//        return teamService.getTeamByName(teamName.toLowerCase(Locale.ROOT));
-//    }
-
 }

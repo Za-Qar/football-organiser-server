@@ -6,13 +6,13 @@ import com.google.cloud.Timestamp;
 public class Chat {
     private String text;
     private Timestamp sentTimeStamp;
-    private String uid;
+    private String uuid;
     private String photoURL;
 
-    public Chat(String text, Timestamp sentTimeStamp, String uid, String photoURL) {
+    public Chat(String text, Timestamp sentTimeStamp, String uuid, String photoURL) {
         this.text = text;
         this.sentTimeStamp = sentTimeStamp;
-        this.uid = uid;
+        this.uuid = uuid;
         this.photoURL = photoURL;
     }
 
@@ -28,7 +28,7 @@ public class Chat {
     }
 
     public String getUid() {
-        return uid;
+        return uuid;
     }
 
     public String getPhotoURL() {
@@ -43,8 +43,8 @@ public class Chat {
         this.sentTimeStamp = sentTimeStamp;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public void setPhotoURL(String photoURL) {
@@ -56,7 +56,7 @@ public class Chat {
         return "Chat{" +
                 "text='" + text + '\'' +
                 ", sentTimeStamp='" + sentTimeStamp + '\'' +
-                ", uid=" + uid +
+                ", uuid=" + uuid +
                 ", photoUrl='" + photoURL + '\'' +
                 '}';
     }
@@ -66,11 +66,11 @@ public class Chat {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Chat chat = (Chat) o;
-        return uid == chat.uid && Objects.equals(text, chat.text) && Objects.equals(sentTimeStamp, chat.sentTimeStamp) && Objects.equals(photoURL, chat.photoURL);
+        return uuid == chat.uuid && Objects.equals(text, chat.text) && Objects.equals(sentTimeStamp, chat.sentTimeStamp) && Objects.equals(photoURL, chat.photoURL);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(text, sentTimeStamp, uid, photoURL);
+        return Objects.hash(text, sentTimeStamp, uuid, photoURL);
     }
 }

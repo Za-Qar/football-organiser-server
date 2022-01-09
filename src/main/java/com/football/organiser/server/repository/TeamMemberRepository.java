@@ -21,7 +21,9 @@ public class TeamMemberRepository
 
     public List<TeamMember> getAllTeamMembersInGivenTeam(final String teamName) throws ExecutionException, InterruptedException {
 
-        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
+        System.out.println("teamName: " + teamName);
+
+        ApiFuture<QuerySnapshot> queryAllTeamMembers = firestoreDatabase.db.collection("teams").document(teamName.toLowerCase(Locale.ROOT)).collection("teamMembers").get();
         List<QueryDocumentSnapshot> teamMemberDocuments = queryAllTeamMembers.get().getDocuments();
 
         return teamMemberDocuments.stream()

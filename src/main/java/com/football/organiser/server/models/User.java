@@ -5,15 +5,15 @@ import java.util.List;
 public class User {
     private String name;
     private String email;
-    private String uid;
+    private String uuid;
     private String photoUrl;
     private List<String> teamsJoined;
     private long phoneNumber;
 
-    public User(String name, String email, String uid, String photoUrl, List<String> teamsJoined, long phoneNumber) {
+    public User(String name, String email, String uuid, String photoUrl, List<String> teamsJoined, long phoneNumber) {
         this.name = name;
         this.email = email;
-        this.uid = uid;
+        this.uuid = uuid;
         this.photoUrl = photoUrl;
         this.teamsJoined = teamsJoined;
         this.phoneNumber = phoneNumber;
@@ -37,12 +37,12 @@ public class User {
         this.email = email;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getPhotoUrl() {

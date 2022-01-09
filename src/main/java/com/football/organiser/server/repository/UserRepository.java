@@ -39,7 +39,7 @@ public class UserRepository {
         Map<String, Object> userData = new HashMap<>();
         userData.put("name", user.getName());
         userData.put("email", user.getEmail().toLowerCase(Locale.ROOT));
-        userData.put("uid", user.getUid());
+        userData.put("uuid", user.getUuid());
         userData.put("photoUrl", user.getPhotoUrl());
         userData.put("teamsJoined", user.getTeamsJoined());
         userData.put("phoneNumber", user.getPhoneNumber());

@@ -3,13 +3,15 @@ package com.football.organiser.server.models;
 public class UserInfoInTeam {
     private String photoUrl;
     private String name;
-    private String uid;
+    private String uuid;
 
-    public UserInfoInTeam(String photoUrl, String name, String uid) {
+    public UserInfoInTeam(String photoUrl, String name, String uuid) {
         this.photoUrl = photoUrl;
         this.name = name;
-        this.uid = uid;
+        this.uuid = uuid;
     }
+
+    public UserInfoInTeam() {}
 
     public String getPhotoUrl() {
         return photoUrl;
@@ -19,8 +21,8 @@ public class UserInfoInTeam {
         return name;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUuid() {
+        return uuid;
     }
 
     public void setPhotoUrl(String photoUrl) {
@@ -31,7 +33,7 @@ public class UserInfoInTeam {
         this.name = name;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

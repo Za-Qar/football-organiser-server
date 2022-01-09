@@ -1,5 +1,7 @@
 package com.football.organiser.server.models;
 
+import java.util.List;
+
 public class Team {
     private String country;
     private String teamCaptain;
@@ -11,9 +13,9 @@ public class Team {
     private Boolean isPublic;
     private String gameType;
     private String description;
-    private UserInfoInTeam teamMemberInfo;
+    private List<UserInfoInTeam> teamMemberInfo;
 
-    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uuid, String groupImage, Boolean isPublic, String gameType, String description, UserInfoInTeam teamMemberInfo) {
+    public Team(String country, String teamCaptain, String teamCaptainEmail, String teamCaptainPhotoUrl, String teamName, String uuid, String groupImage, Boolean isPublic, String gameType, String description, List<UserInfoInTeam> teamMemberInfo) {
         this.country = country;
         this.teamCaptain = teamCaptain;
         this.teamCaptainEmail = teamCaptainEmail;
@@ -69,7 +71,7 @@ public class Team {
         return description;
     }
 
-    public UserInfoInTeam getTeamMemberInfo() {
+    public List<UserInfoInTeam> getTeamMemberInfo() {
         return teamMemberInfo;
     }
 }

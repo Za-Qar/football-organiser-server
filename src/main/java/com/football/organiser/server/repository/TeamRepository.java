@@ -3,6 +3,7 @@ package com.football.organiser.server.repository;
 import com.football.organiser.server.database.FirestoreDatabase;
 import com.football.organiser.server.models.Team;
 import com.football.organiser.server.models.TeamMember;
+import com.football.organiser.server.models.UserInfoInTeam;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 public class TeamRepository {
@@ -50,9 +50,6 @@ public class TeamRepository {
 
     public Map<String, Object> addPlayersToTeam(final TeamMember teamMember) throws ExecutionException, InterruptedException {
 
-        System.out.println("player being added to team");
-        System.out.println("this is teamMember.getTeamNameToJoin(): " + teamMember.getTeamNameToJoin());
-
         // data model 1, teams members are sub collections
         // Add document data
         Map<String, Object> teamMemberData = new HashMap<>();
@@ -62,7 +59,7 @@ public class TeamRepository {
         teamMemberData.put("teamMemberName", teamMember.getTeamMemberName().toLowerCase(Locale.ROOT));
         teamMemberData.put("teamMemberEmail", teamMember.getTeamMemberEmail().toLowerCase(Locale.ROOT));
         teamMemberData.put("teamNameToJoin", teamMember.getTeamNameToJoin());
-        teamMemberData.put("uid", teamMember.getUid());
+        teamMemberData.put("uuid", teamMember.getUuid());
         teamMemberData.put("gender", teamMember.getGender());
 
         DocumentReference createGroupCollection = firestoreDatabase.db.collection("teams").document(teamMember.getTeamNameToJoin().toLowerCase(Locale.ROOT)).collection("teamMembers").document();
@@ -73,14 +70,16 @@ public class TeamRepository {
         // result.get() blocks on response
         populateCreatedGroupCollection.get();
 
+        // add UserInfoHere
+        UserInfoInTeam userInfoInTeam = new UserInfoInTeam(teamMember.getPhotoUrl(), teamMember.getTeamMemberName(), teamMember.getUuid());
+        this.addUserToTeam(userInfoInTeam, teamMember.getTeamNameToJoin());
+
         return teamMemberData;
     }
 
     public List<Team> getAllTeams() throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> queryAllTeams = firestoreDatabase.db.collection("teams").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = queryAllTeams.get().getDocuments();
-
-//        this.getFilterUserJoinedTeams("b8II3O2z8ESsmKD9A5uXdwd1ejQ2");
 
         return allTeamsDocuments.stream()
                 .map(a -> a.toObject(Team.class))
@@ -137,18 +136,21 @@ public class TeamRepository {
 
     public Team getTeamByName(final String teamName) throws ExecutionException, InterruptedException {
         ApiFuture<DocumentSnapshot> getTeam = firestoreDatabase.db.collection("teams").document(teamName).get();
-        return getTeam.get().toObject(Team.class);
+        if(getTeam.get().exists()){
+            return getTeam.get().toObject(Team.class);
+        } else {
+            return new Team();
+        }
+
     }
 
     private TeamMember getFilterUserJoinedTeamMembers(final String teamMemberUid, final String teamName) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> createGroupCollection = firestoreDatabase.db.collection("teams").document(teamName).collection("teamMembers").get();
         List<QueryDocumentSnapshot> allTeamsDocuments = createGroupCollection.get().getDocuments();
 
-        // The following will also work to get the required object from a list
-        // .filter(a -> Objects.equal(a.getUid(), "b8II3O2z8ESsmKD9A5uXdwd1ejQ2"))
         return allTeamsDocuments.stream()
                 .map(a -> a.toObject(TeamMember.class))
-                .filter(a -> a.getUid().equals(teamMemberUid))
+                .filter(a -> a.getUuid().equals(teamMemberUid))
                 .findFirst()
                 .orElse(null);
     }
@@ -163,20 +165,20 @@ public class TeamRepository {
 
     public Map<String, Object> getTeamById(final String id, final Team team, final TeamMember teamMember){
 
-
         Map<String, Object> teamDataToUpdate = new HashMap<>();
         teamDataToUpdate.put("teamName", team.getTeamName());
         teamDataToUpdate.put("country", team.getCountry());
         teamDataToUpdate.put("teamCaptain", team.getTeamCaptain());
-
 
         firestoreDatabase.db.collection("teams").document("5I5bKW4EIMQ2riQvXqcv").update(teamDataToUpdate);
 
         return teamDataToUpdate;
     }
 
-    private static <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
-        return IntStream.range(0, keys.size()).boxed()
-                .collect(Collectors.toMap(keys::get, values::get));
+    private WriteResult addUserToTeam(final UserInfoInTeam userInfoInTeam, String teamName) throws ExecutionException, InterruptedException {
+        DocumentReference teamDocRef = firestoreDatabase.db.collection("teams").document(teamName.toLowerCase(Locale.ROOT));
+        ApiFuture<WriteResult> arrayUnion = teamDocRef.update("teamMemberInfo",
+                FieldValue.arrayUnion(userInfoInTeam));
+        return arrayUnion.get();
     }
 }
