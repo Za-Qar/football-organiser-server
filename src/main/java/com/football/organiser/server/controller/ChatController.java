@@ -27,8 +27,6 @@ public class ChatController {
 
     @PostMapping
     public Chat createGroup(@RequestBody final Chat groupName) throws ExecutionException, InterruptedException {
-        System.out.println("post has gone through");
-        System.out.println("this is the group name" + groupName.toString());
         chatService.createGroup(groupName);
         return groupName;
     }
