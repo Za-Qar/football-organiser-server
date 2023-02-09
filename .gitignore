@@ -34,6 +34,3 @@ build/
 
 ### Firestore credentials ###
 fireStoreCred.json
-
-### Resources ####
-fireStoreCred.json
