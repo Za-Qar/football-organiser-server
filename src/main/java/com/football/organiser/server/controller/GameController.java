@@ -1,6 +1,8 @@
 package com.football.organiser.server.controller;
 
 import com.football.organiser.server.models.Chat;
+import com.football.organiser.server.services.ChatService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ExecutionException;
@@ -10,7 +12,12 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/game")
 public class GameController {
 
-    public GameController() {}
+    private final ChatService chatService;
+
+    @Autowired
+    public GameController(final ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @PostMapping
     public Chat createGroup(@RequestBody final Chat groupName) throws ExecutionException, InterruptedException {
